@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { FC, useState } from "react";
 import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -23,21 +16,24 @@ const YoutubePlaylistTable: FC<YoutubePlaylistTableProps> = ({
   const [selectedPlaylist, setSelectedPlaylist] =
     useState<YoutubePlaylistItem>();
 
+  const togglePlaylist = (playlist: YoutubePlaylistItem) => {
+    if (selectedPlaylist?.id === playlist.id) {
+      setSelectedPlaylist(undefined);
+      return;
+    }
+
+    setSelectedPlaylist(playlist);
+  };
+
   return (
     <div>
       <Table className="divide-y">
-        <TableHeader>
-          <TableRow>
-            <TableHead></TableHead>
-            <TableHead className="px-2 sm:px-6 py-4 text-sm min-w-[180px] sm:min-w-[200px] md:min-w-[300px] lg:min-w-[500px]">
-              Name
-            </TableHead>
-            <TableHead className="px-0 py-3"></TableHead>
-          </TableRow>
-        </TableHeader>
         <TableBody className="divide-y">
           {playlists.map((playlist) => (
-            <TableRow key={playlist.id}>
+            <TableRow
+              key={playlist.id}
+              onClick={togglePlaylist.bind(null, playlist)}
+            >
               <TableCell className="px-1 sm:px-1 md:px-1 py-4 overflow-x-hidden ">
                 {playlist.thumbnail && (
                   <Image
@@ -53,8 +49,8 @@ const YoutubePlaylistTable: FC<YoutubePlaylistTableProps> = ({
               </TableCell>
               <TableCell>
                 <Checkbox
-                  className="mr-1 min-w-[30px] min-h-[30px] sm:min-w-[40px] sm:min-h-[40px]"
-                  onCheckedChange={() => setSelectedPlaylist(playlist)}
+                  className="mr-1 min-w-[30px] min-h-[30px] sm:min-w-[30px] sm:min-h-[30px] border-red-500"
+                  indicatorClassName="bg-red-500"
                   checked={selectedPlaylist?.id === playlist.id}
                 />
               </TableCell>

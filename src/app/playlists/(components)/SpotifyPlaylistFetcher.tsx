@@ -28,10 +28,14 @@ const SpotifyPlaylists: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="text-2xl font-bold">Fetch your playlists</div>
+    <div className="flex flex-col gap-2">
+      <div className="text-2xl font-bold">Spotify playlists</div>
+      <div className="text-md text-gray-500">
+        Enter Spotify username to get playlists from and choose which playlist
+        to migrate songs from.
+      </div>
 
-      <div className="flex flex-row items-center gap-4">
+      <div className="flex flex-row gap-4">
         <Input
           type="text"
           placeholder="Spotify Username"
@@ -40,7 +44,10 @@ const SpotifyPlaylists: React.FC = () => {
           onKeyDown={handleKeyPress}
         />
 
-        <Button onClick={getSpotifyPlaylists} className="rounded-full mt-2">
+        <Button
+          onClick={getSpotifyPlaylists}
+          className="rounded-full mt-2 bg-green-500"
+        >
           Get Playlists
         </Button>
       </div>

@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 const SpotifyPlaylists = () => {
-  const { playlists, setSelectedPlaylist } = useSpotify();
+  const { playlists, selectedPlaylist, setSelectedPlaylist } = useSpotify();
 
   return (
     <div>
@@ -40,17 +40,21 @@ const SpotifyPlaylists = () => {
                   {playlist.tracks.total}
                 </TableCell>
                 <TableCell className="px-0 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <Button
-                    className="rounded-full border border-solid border-transparent transition-colors bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-                    onClick={() =>
-                      setSelectedPlaylist({
-                        id: playlist.id,
-                        name: playlist.name,
-                      })
-                    }
-                  >
-                    Get tracks
-                  </Button>
+                  {playlist.id !== selectedPlaylist?.id ? (
+                    <Button
+                      className="rounded-full bg-green-500"
+                      onClick={() =>
+                        setSelectedPlaylist({
+                          id: playlist.id,
+                          name: playlist.name,
+                        })
+                      }
+                    >
+                      Get tracks
+                    </Button>
+                  ) : (
+                    <div className="text-green-500 mr-6">Selected</div>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

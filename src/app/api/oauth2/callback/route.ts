@@ -45,7 +45,8 @@ export async function GET(req: Request) {
         : 60 * 60 * 24 * 7,
     });
 
-    return NextResponse.redirect(new URL("/playlists", req.url));
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    return NextResponse.redirect(new URL("/playlists", baseUrl));
   } catch (err) {
     console.error(err);
     return NextResponse.json("Something went wrong");

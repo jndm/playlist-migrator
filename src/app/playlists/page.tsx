@@ -24,8 +24,14 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col w-full md:max-w-[600] lg:max-w-[800]">
-      <div className="flex flex-row items-center my-8 space-x-4">
-        <Image src={img} className="h-12 rounded-lg" alt="user logo" />
+      <div className="flex flex-row items-center my-6 md:my-8 space-x-4">
+        <Image
+          src={img}
+          className="h-12 rounded-lg"
+          alt="user logo"
+          width={50}
+          height={80}
+        />
         <div className="text-3xl sm:text-4xl font-bold">{username}</div>
       </div>
 
