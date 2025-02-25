@@ -10,7 +10,6 @@ let token = "";
 
 const getAccessToken = async () => {
   if (!!token) {
-    console.log("Token already exists");
     return token;
   }
 
@@ -85,11 +84,39 @@ export const getPlaylistTracks = async (
   // TODO: Only fetches max 100 tracks - need to handle pagination if want to mork for more
 
   const data = await response.json();
-  const trackNames = data.items.map((item: any) => ({
-    id: item.track.id,
-    name: item.track.name,
-    artists: item.track.artists.map((artist: any) => artist.name),
-  }));
+  if (!data.items || data.items.length === 0) {
+    return [];
+  }
+
+  const trackNames = data.items
+    .map((item: SpotifyApiPlaylistTrack) => {
+      if (!item.track) {
+        return null;
+      }
+
+      return {
+        id: item.track.id,
+        name: item.track.name,
+        artists: item.track.artists.map(
+          (artist: SpotifyApiArtist) => artist.name
+        ),
+      };
+    })
+    .filter((x: SpotifyTrack) => !!x);
 
   return trackNames;
 };
+
+interface SpotifyApiPlaylistTrack {
+  track: SpotifyApiTrack | null;
+}
+
+interface SpotifyApiTrack {
+  artists: SpotifyApiArtist[];
+  id: string;
+  name: string;
+}
+
+interface SpotifyApiArtist {
+  name: string;
+}

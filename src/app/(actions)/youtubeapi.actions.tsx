@@ -2,6 +2,7 @@
 import { oauth2Client } from "../utils/google-auth";
 import { cookies } from "next/headers";
 import { google } from "googleapis";
+import { YoutubePlaylistItem } from "./youtube.model";
 
 export const getUserYoutubePlaylists = async (): Promise<
   YoutubePlaylistItem[]
@@ -74,7 +75,7 @@ export const searchYouTubeSong = async (
       return [];
     }
 
-    const addResponse = await youtube.playlistItems.insert({
+    await youtube.playlistItems.insert({
       part: ["snippet"],
       requestBody: {
         snippet: {

@@ -2,7 +2,6 @@
 
 import React from "react";
 import { useSpotify } from "../(providers)/SpotifyContext";
-import { searchYouTubeSong } from "@/app/(actions)/youtubeapi.actions";
 import {
   Table,
   TableBody,
@@ -11,10 +10,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { SpotifyTrack } from "@/app/(actions)/spotifyapi.actions";
 import { CheckedState } from "@radix-ui/react-checkbox";
+import { SpotifyTrack } from "@/app/(actions)/spotify.model";
 
 const SpotifyTracks: React.FC = () => {
   const {

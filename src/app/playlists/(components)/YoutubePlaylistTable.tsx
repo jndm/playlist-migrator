@@ -11,6 +11,7 @@ import {
 import { FC, useState } from "react";
 import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
+import { YoutubePlaylistItem } from "@/app/(actions)/youtube.model";
 
 interface YoutubePlaylistTableProps {
   playlists: YoutubePlaylistItem[];

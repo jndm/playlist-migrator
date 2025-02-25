@@ -10,7 +10,7 @@ import {
   getPlaylistTracks,
   getUserPlaylists,
 } from "@/app/(actions)/spotifyapi.actions";
-import { SpotifyTrack } from "@/app/(actions)/spotify.model";
+import { SpotifyPlaylist, SpotifyTrack } from "@/app/(actions)/spotify.model";
 
 type SelectedPlaylist = {
   id: string;
@@ -18,7 +18,7 @@ type SelectedPlaylist = {
 };
 
 interface SpotifyContextProps {
-  playlists: any[];
+  playlists: SpotifyPlaylist[];
   fetchPlaylists: (username: string) => Promise<void>;
   selectedPlaylist: SelectedPlaylist | null;
   tracks: SpotifyTrack[];
@@ -36,7 +36,7 @@ const SpotifyContext = createContext<SpotifyContextProps | undefined>(
 export const SpotifyProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [playlists, setPlaylists] = useState<any[]>([]);
+  const [playlists, setPlaylists] = useState<SpotifyPlaylist[]>([]);
   const [loadingPlaylists, setLoadingPlaylists] = useState<boolean>(false);
   const [tracks, setTracks] = useState<SpotifyTrack[]>([]);
   const [selectedPlaylist, setSelectedPlaylist] =

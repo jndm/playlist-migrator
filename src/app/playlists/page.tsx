@@ -7,6 +7,7 @@ import SpotifyTracks from "./(components)/SpotifyTracks";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import YoutubePlaylistSelector from "./(components)/YoutubePlaylistSelector";
+import Image from "next/image";
 
 export default async function Home() {
   const cookiesStore = await cookies();
@@ -24,7 +25,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col w-full md:max-w-[600] lg:max-w-[800]">
       <div className="flex flex-row items-center my-8 space-x-4">
-        <img src={img} className="h-12 rounded-lg" />
+        <Image src={img} className="h-12 rounded-lg" alt="user logo" />
         <div className="text-3xl sm:text-4xl font-bold">{username}</div>
       </div>
 

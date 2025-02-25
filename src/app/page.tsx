@@ -7,8 +7,8 @@ export default async function Home() {
         Welcome to the Playlist Migrator
       </h1>
       <div className="text-1xl sm:text-1xl">
-        To get started please login to to Google account you'll be creating new
-        playlist for
+        To get started please login to to Google account you&aposll be creating
+        new playlist for
       </div>
 
       <GoogleLoginBtn />

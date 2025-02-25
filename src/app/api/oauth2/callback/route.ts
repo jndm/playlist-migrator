@@ -3,7 +3,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { oauth2Client } from "@/app/utils/google-auth";
-import { parseJwt } from "@/app/utils/jwt-utils";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
