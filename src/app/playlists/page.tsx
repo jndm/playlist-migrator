@@ -23,7 +23,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="flex flex-col w-full md:max-w-[600] lg:max-w-[800]">
+    <div className="flex flex-col w-full md:max-w-[600px] lg:max-w-[800px]">
       <div className="flex flex-row items-center my-6 md:my-8 space-x-4">
         <Image
           src={img}
