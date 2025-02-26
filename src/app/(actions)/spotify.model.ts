@@ -30,4 +30,5 @@ export type SpotifyTrack = {
   id: string;
   name: string;
   artists: string[];
+  exportStatus?: "loading" | "success" | "error";
 };

@@ -2,7 +2,11 @@
 import { oauth2Client } from "../utils/google-auth";
 import { cookies } from "next/headers";
 import { google } from "googleapis";
-import { YoutubePlaylistItem } from "./youtube.model";
+import {
+  AddTracksToYoutubeRequest,
+  AddTracksToYoutubeResponse,
+  YoutubePlaylistItem,
+} from "./youtube.model";
 
 export const getUserYoutubePlaylists = async (): Promise<
   YoutubePlaylistItem[]
@@ -44,10 +48,9 @@ export const getUserYoutubePlaylists = async (): Promise<
   }
 };
 
-export const searchYouTubeSong = async (
-  artists: string[],
-  songTitle: string
-) => {
+export const addTracksToYoutube = async (
+  request: AddTracksToYoutubeRequest
+): Promise<AddTracksToYoutubeResponse[]> => {
   const cookiesStore = await cookies();
   const accessToken = cookiesStore.get("access_token");
 
@@ -62,36 +65,56 @@ export const searchYouTubeSong = async (
     auth: oauth2Client,
   });
 
-  try {
-    const response = await youtube.search.list({
-      part: ["snippet"],
-      q: `${artists.join(", ")} ${songTitle}`,
-      type: ["video"],
-      videoCategoryId: "10", // Music category
-      maxResults: 1, // Adjust as needed
-    });
+  const { playlistId, tracks } = request;
 
-    if (!response.data.items?.length || !response.data.items[0].id?.videoId) {
-      return [];
-    }
+  const response: AddTracksToYoutubeResponse[] = [];
 
-    await youtube.playlistItems.insert({
-      part: ["snippet"],
-      requestBody: {
-        snippet: {
-          playlistId: "PLyLBTt4SdCfqF2t_RzStbOQfuGiTtdcUz",
-          resourceId: {
-            kind: "youtube#video",
-            videoId: response.data.items[0].id.videoId,
+  for (const track of tracks) {
+    try {
+      const searchResp = await youtube.search.list({
+        part: ["snippet"],
+        q: `${track.artists.join(", ")} ${track.title}`,
+        type: ["video"],
+        videoCategoryId: "10", // Music category
+        maxResults: 1, // Adjust as needed
+      });
+
+      if (
+        !searchResp.data.items?.length ||
+        !searchResp.data.items[0].id?.videoId
+      ) {
+        response.push({
+          trackId: track.trackId,
+          status: "error",
+        });
+        continue;
+      }
+
+      await youtube.playlistItems.insert({
+        part: ["snippet"],
+        requestBody: {
+          snippet: {
+            playlistId: playlistId,
+            resourceId: {
+              kind: "youtube#video",
+              videoId: searchResp.data.items[0].id.videoId,
+            },
           },
         },
-      },
-    });
+      });
 
-    return response.data.items;
-  } catch (error) {
-    // TODO: Handle gracefully
-    console.error("Error searching for song on YouTube:", error);
-    throw error;
+      response.push({
+        trackId: track.trackId,
+        status: "success",
+      });
+    } catch (error) {
+      console.error("Error searching for song on YouTube:", error);
+      response.push({
+        trackId: track.trackId,
+        status: "error",
+      });
+    }
   }
+
+  return response;
 };

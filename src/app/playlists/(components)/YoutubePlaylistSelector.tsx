@@ -15,7 +15,7 @@ const YoutubePlaylistSelector: FC = async () => {
         <YoutubePlaylistTable playlists={playlists} />
       ) : (
         <div className="text-sm text-gray-500">
-          <div className="mt-2">No playlists yet.</div>
+          <div className="mt-2">No playlists found for user.</div>
         </div>
       )}
     </div>

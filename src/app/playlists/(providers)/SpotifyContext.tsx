@@ -27,6 +27,9 @@ interface SpotifyContextProps {
 
   selectedTracks: SpotifyTrack[];
   setSelectedTracks: (tracks: SpotifyTrack[]) => void;
+  updateTracksExportStatus: (
+    updates: { trackId: string; status: "success" | "error" | "loading" }[]
+  ) => void;
 }
 
 const SpotifyContext = createContext<SpotifyContextProps | undefined>(
@@ -80,6 +83,19 @@ export const SpotifyProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [selectedPlaylist]);
 
+  const updateTracksExportStatus = (
+    updates: { trackId: string; status: "success" | "error" | "loading" }[]
+  ) => {
+    const updated: SpotifyTrack[] = tracks.map((track) => ({
+      ...track,
+      exportStatus:
+        updates.find((u) => u.trackId === track.id)?.status ??
+        track.exportStatus,
+    }));
+
+    setTracks(updated);
+  };
+
   return (
     <SpotifyContext.Provider
       value={{
@@ -91,6 +107,7 @@ export const SpotifyProvider: React.FC<{ children: ReactNode }> = ({
         loadingTracks,
         selectedTracks,
         setSelectedTracks,
+        updateTracksExportStatus,
       }}
     >
       {children}

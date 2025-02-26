@@ -5,9 +5,10 @@ import SpotifyPlaylistFetcher from "./(components)/SpotifyPlaylistFetcher";
 import SpotifyPlaylists from "./(components)/SpotifyPlaylists";
 import SpotifyTracks from "./(components)/SpotifyTracks";
 import { redirect } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import YoutubePlaylistSelector from "./(components)/YoutubePlaylistSelector";
 import Image from "next/image";
+import { YoutubeProvider } from "./(providers)/YoutubeContext";
+import { MigrateSongsButton } from "./(components)/MigrateSongsButton";
 
 export default async function Home() {
   const cookiesStore = await cookies();
@@ -36,14 +37,16 @@ export default async function Home() {
       </div>
 
       <div className="flex flex-col gap-8">
-        <YoutubePlaylistSelector />
-        <SpotifyProvider>
-          <SpotifyPlaylistFetcher />
-          <SpotifyPlaylists />
-          <SpotifyTracks />
+        <YoutubeProvider>
+          <YoutubePlaylistSelector />
+          <SpotifyProvider>
+            <SpotifyPlaylistFetcher />
+            <SpotifyPlaylists />
+            <SpotifyTracks />
 
-          <Button>Add selected songs to playlist</Button>
-        </SpotifyProvider>
+            <MigrateSongsButton />
+          </SpotifyProvider>
+        </YoutubeProvider>
       </div>
     </div>
   );

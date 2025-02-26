@@ -13,6 +13,8 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { SpotifyTrack } from "@/app/(actions)/spotify.model";
+import { Spinner } from "@/components/ui/spinner";
+import { CheckIcon, XIcon } from "lucide-react";
 
 const SpotifyTracks: React.FC = () => {
   const {
@@ -44,6 +46,31 @@ const SpotifyTracks: React.FC = () => {
     setSelectedTracks(tracks);
   };
 
+  const getTrackStatusElement = (track: SpotifyTrack) => {
+    const status = track.exportStatus;
+
+    if (status === "success") {
+      return <CheckIcon className="text-green-500" />;
+    }
+
+    if (status === "error") {
+      return <XIcon className="text-red-500" />;
+    }
+
+    if (status === "loading") {
+      return <Spinner size="small" />;
+    }
+
+    return (
+      <Checkbox
+        className="mr-1 border-green-500"
+        onCheckedChange={(e: CheckedState) => toggleTrack(e, track)}
+        checked={selectedTracks.some((t) => t.id === track.id)}
+        indicatorClassName="bg-green-500"
+      />
+    );
+  };
+
   if (!selectedPlaylist) return null;
 
   if (loadingTracks) return <div>Loading...</div>;
@@ -63,13 +90,15 @@ const SpotifyTracks: React.FC = () => {
             <TableHead className="px-3 sm:px-6 py-3 text-left text-xs font-medium uppercase">
               Track
             </TableHead>
-            <TableHead className="px-4 sm:px-4 py-3 text-left text-xs font-medium uppercase">
-              <Checkbox
-                className="mr-1 border-green-500"
-                onCheckedChange={toggleTrackAll}
-                checked={selectedTracks.length > 0}
-                indicatorClassName="bg-green-500"
-              />
+            <TableHead className="px-0 py-3 text-left min-w-[60px]">
+              <div className="flex items-center justify-end px-4 sm:px-4">
+                <Checkbox
+                  className="mr-1 border-green-500"
+                  onCheckedChange={toggleTrackAll}
+                  checked={selectedTracks.length > 0}
+                  indicatorClassName="bg-green-500"
+                />
+              </div>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -82,13 +111,10 @@ const SpotifyTracks: React.FC = () => {
               <TableCell className="px-3 sm:px-6 py-3 text-sm">
                 {track.artists.join(", ")} - {track.name}
               </TableCell>
-              <TableCell className="px-4 sm:px-4 py-3 text-sm text-center">
-                <Checkbox
-                  className="mr-1 border-green-500"
-                  onCheckedChange={(e: CheckedState) => toggleTrack(e, track)}
-                  checked={selectedTracks.some((t) => t.id === track.id)}
-                  indicatorClassName="bg-green-500"
-                />
+              <TableCell className="px-0 py-3 min-w-[60px]">
+                <div className="flex items-center justify-end px-4 sm:px-4">
+                  {getTrackStatusElement(track)}
+                </div>
               </TableCell>
             </TableRow>
           ))}

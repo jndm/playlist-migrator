@@ -1,10 +1,11 @@
 "use client";
 
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { FC, useState } from "react";
+import { FC } from "react";
 import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
 import { YoutubePlaylistItem } from "@/app/(actions)/youtube.model";
+import { useYoutube } from "../(providers)/YoutubeContext";
 
 interface YoutubePlaylistTableProps {
   playlists: YoutubePlaylistItem[];
@@ -13,16 +14,15 @@ interface YoutubePlaylistTableProps {
 const YoutubePlaylistTable: FC<YoutubePlaylistTableProps> = ({
   playlists,
 }: YoutubePlaylistTableProps) => {
-  const [selectedPlaylist, setSelectedPlaylist] =
-    useState<YoutubePlaylistItem>();
+  const { targetPlaylist, setTargetPlaylist } = useYoutube();
 
   const togglePlaylist = (playlist: YoutubePlaylistItem) => {
-    if (selectedPlaylist?.id === playlist.id) {
-      setSelectedPlaylist(undefined);
+    if (targetPlaylist?.id === playlist.id) {
+      setTargetPlaylist(undefined);
       return;
     }
 
-    setSelectedPlaylist(playlist);
+    setTargetPlaylist(playlist);
   };
 
   return (
@@ -51,7 +51,7 @@ const YoutubePlaylistTable: FC<YoutubePlaylistTableProps> = ({
                 <Checkbox
                   className="mr-1 min-w-[30px] min-h-[30px] sm:min-w-[30px] sm:min-h-[30px] border-red-500"
                   indicatorClassName="bg-red-500"
-                  checked={selectedPlaylist?.id === playlist.id}
+                  checked={targetPlaylist?.id === playlist.id}
                 />
               </TableCell>
             </TableRow>
